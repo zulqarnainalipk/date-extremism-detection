@@ -76,6 +76,20 @@ rel(ax[1], tests[0], y_te, f"(b) Test, single model (fold 1)\n(n=749, ECE={ece(t
 rel(ax[2], ens, y_te, f"(c) Test, 10-model ensemble\n(n=749, ECE={ece(ens, y_te):.3f})")
 fig.tight_layout(); fig.savefig(f"{OUT}/Fig7_reliability.png", bbox_inches="tight"); plt.close(fig)
 
+# ---------- Fig 16: five-seed variation of the core grid
+cfgs = [("date_full", "Full DATE"), ("no_aug", "w/o aug."), ("no_cw", "w/o class w."), ("no_cosine", "w/o cosine"), ("date_grouped", "grouped folds"), ("roberta_base", "RoBERTa-base")]
+per = {k: pd.read_csv(f"{B}/tables/multiseed_{k}_per_seed.csv") for k, _ in cfgs}
+fig, ax = plt.subplots(1, 3, figsize=(12, 3.4))
+for a_, col, ttl, col2 in [(ax[0], "oof_acc", "(a) Pooled out-of-fold accuracy", None), (ax[1], "test_ens_acc", "(b) Test accuracy, ensemble", None), (ax[2], "test_ens_ece", "(c) Test ECE", "test_single_ece")]:
+    for i, (k, nm) in enumerate(cfgs):
+        v = per[k][col].values; a_.scatter(np.full(len(v), i) + np.linspace(-.12, .12, len(v)), v, s=14, color="C0", zorder=3)
+        a_.hlines(v.mean(), i - .25, i + .25, color="k", lw=1.4, zorder=4)
+        if col2: w_ = per[k][col2].values; a_.scatter(np.full(len(w_), i) + np.linspace(-.12, .12, len(w_)), w_, s=14, facecolors="none", edgecolors="C3", zorder=3)
+    a_.set_xticks(range(len(cfgs))); a_.set_xticklabels([n for _, n in cfgs], rotation=30, ha="right", fontsize=8); a_.set_title(ttl, fontsize=10)
+ax[2].scatter([], [], s=14, color="C0", label="ensemble"); ax[2].scatter([], [], s=14, facecolors="none", edgecolors="C3", label="single models (mean)"); ax[2].legend(fontsize=7, loc="upper right")
+ax[0].set_ylabel("Accuracy"); ax[1].set_ylabel("Accuracy"); ax[2].set_ylabel("ECE (15 bins)")
+fig.tight_layout(); fig.savefig(f"{OUT}/Fig16_multiseed.png", bbox_inches="tight"); plt.close(fig)
+
 # ---------- straight copies
 for src, dst in [("confusion_oof_date_full", "Fig8a_cm_oof"), ("confusion_test_date_full", "Fig8b_cm_test"), ("confidence_test_date_full", "Fig9_confidence"),
                  ("ensemble_size_curve", "Fig11_ensemble_size"), ("risk_coverage_date_full", "Fig12_risk_coverage"), ("learning_curve_augmentation", "Fig13_learning_curve"),

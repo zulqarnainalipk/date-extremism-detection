@@ -1,4 +1,4 @@
-# Results of the paper run (seed 42)
+# Results of the paper runs (core grid: seeds 42 to 46; other configurations: seed 42)
 
 Produced by `src/date_pipeline.py` on two Kaggle Tesla T4 GPUs (about 4 hours). Re-create all derived files with `python analysis/run_all.py` or rebuild the tables from the saved folds with `ANALYZE_ONLY=1 RUN=all python src/date_pipeline.py`.
 
@@ -18,4 +18,4 @@ Produced by `src/date_pipeline.py` on two Kaggle Tesla T4 GPUs (about 4 hours). 
 
 Not included: the augmented-text cache (`aug/`, 29 MB, regenerated deterministically) and model weights (not saved; fold probabilities are).
 
-Not included: the DeBERTa-v3 configuration (its fp16 training run failed with a gradient error; the pipeline now keeps fp32 master weights, which addresses this).
+Note: the file `tables/external_transfer.csv` comes from the first complete run, because the Kaggle session that produced the five-seed results could not load the second external hate-speech set; the other files come from the five-seed run (45 run folders, including DeBERTa-v3).

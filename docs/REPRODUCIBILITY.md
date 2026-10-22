@@ -19,7 +19,7 @@ The reported results were produced on Kaggle (Python 3.12, PyTorch 2.9.0, transf
 | other base-size encoders | 10-30 min each |
 | whole grid (`RUN=all`) | about 7 GPU-hours, about 4 h wall-clock on two GPUs |
 
-Each additional seed of the core grid costs about 2.3 GPU-hours.
+Each additional seed of the core grid costs about 2.3 GPU-hours; the four extra seeds (43 to 46) of the six core configurations took about five hours on two GPUs.
 
 ## Determinism
 Seeds are fixed (`set_seed`), fold assignment is deterministic (`StratifiedKFold`, shuffle, seed 42), augmentation is seeded per fold and cached. GPU kernels and fp16 mixed precision are not bit-exact across hardware or library versions, so re-running on different hardware reproduces the results up to small numerical differences (typically a few tenths of a percentage point in accuracy).
@@ -47,7 +47,7 @@ python tests/test_repository.py     # or: python -m pytest tests
 The tests check the data file against its recorded hash and split sizes, that the main result tables exist and are consistent, that the annotation agreement can be recomputed, and that the analysis scripts run.
 
 ## Known limitations of the shipped results
-- One seed (42) for the full grid; the multi-seed tables need further seeds (`SEEDS=42,43,44,45,46`).
-- The DeBERTa-v3 configuration is not part of the shipped results (its fp16 training run failed with a gradient error; the pipeline now keeps fp32 master weights).
+- The six core configurations were run with five seeds (42 to 46); every other configuration uses seed 42 only (`SEEDS=42,43,44,45,46 RUN=all` repeats them).
+- `results/tables/external_transfer.csv` was produced in the first complete run (see `results/README.md`).
 - Language identification (`langdetect`) is approximate on short, lower-cased posts.
 - External transfer needs internet access; if a dataset cannot be downloaded, that table is skipped with a log warning.

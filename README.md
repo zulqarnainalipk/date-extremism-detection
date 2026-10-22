@@ -23,7 +23,7 @@ tests/           test_repository.py - sanity tests for data, results and analysi
 paper_assets/    (generated) figures and LaTeX tables written by analysis/run_all.py
 ```
 
-## Headline results (seed 42; 749 held-out test posts)
+## Headline results (seed 42 unless stated; 749 held-out test posts)
 
 | | Single fold models | 10-model ensemble |
 |---|---|---|
@@ -31,12 +31,12 @@ paper_assets/    (generated) figures and LaTeX tables written by analysis/run_al
 | Macro-F1 / ROC-AUC | - | 0.744 / 0.863 |
 | ECE (15 bins) | 0.064 | 0.030 (paired difference -0.029, 95% CI -0.046 to -0.010) |
 
-10-fold cross-validation (single models): accuracy 0.822 +- 0.027. The test part is 16.4% extremist against 44.7% of the training part, so accuracy alone is a weak summary (always predicting "non-extremist" scores 0.836). The complete results - encoder comparison, ablations, calibration, robustness, external transfer - are in [`docs/RESULTS.md`](docs/RESULTS.md) and `results/tables/`.
+10-fold cross-validation (single models): accuracy 0.822 +- 0.027. The six core configurations were repeated with seeds 42 to 46: the full pipeline reaches a test accuracy of 0.847 +- 0.004 (ensemble) and an ensemble ECE of 0.037 against 0.061 for single models, and the ensemble is better calibrated than its members in all 30 runs (`results/tables/multiseed_summary.csv`). The test part is 16.4% extremist against 44.7% of the training part, so accuracy alone is a weak summary (always predicting "non-extremist" scores 0.836). The complete results - encoder comparison, ablations, calibration, robustness, external transfer - are in [`docs/RESULTS.md`](docs/RESULTS.md) and `results/tables/`.
 
 ## Quick start
 
 ```bash
-git clone <repository-url> && cd date-extremism-detection
+git clone https://github.com/zulqarnainalipk/date-extremism-detection.git && cd date-extremism-detection
 pip install -r requirements.txt
 
 python scripts/verify_data.py            # check the data file

@@ -1,12 +1,12 @@
 {
-  "ms_per_post_single_model": 8.243699073791504,
-  "ms_per_post_10_model_ensemble_sequential": 82.43699073791504,
+  "ms_per_post_single_model": 7.6654744148254395,
+  "ms_per_post_10_model_ensemble_sequential": 76.6547441482544,
   "device": "cuda",
   "gpu": "Tesla T4",
   "n_posts": 300,
-  "torch": "2.9.0+cu126",
-  "transformers": "5.2.0",
+  "torch": "2.11.0+cu128",
+  "transformers": "5.16.1",
   "sklearn": "1.6.1",
-  "python": "3.12.12",
+  "python": "3.13.15",
   "dataset_sha256": "ea585a13cbdf93c0398be75a2149c0744c7cbec598f3d55597473c8924e36744"
 }

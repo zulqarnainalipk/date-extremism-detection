@@ -42,7 +42,7 @@ n_fp, n_fn = int((fin.error_type == "false_positive").sum()), int((fin.error_typ
 cnt = lambda code, t=None: int(((fin.category_final == code) & ((fin.error_type == t) if t else True)).sum())
 rows = sorted([(NAMES[c], cnt(c, "false_positive"), cnt(c, "false_negative"), cnt(c)) for c in NAMES if cnt(c)], key=lambda r: -r[3])
 tex = ["\\begin{table}[h!]", "\\centering", "\\small",
-       f"\\caption{{Categories of a random sample of {len(fin)} out-of-fold errors ({n_fp} false positives, {n_fn} false negatives), assigned independently by two annotators (two of the authors) with the codebook released with the code (Cohen's $\\kappa$ = {kappa:.2f}; the annotators agreed on {int((c1 == c2).sum())} of {len(fin)} posts and the {len(dis)} disagreements were resolved by discussion).}}",
+       "\\caption{Error categories in the annotated sample}",
        "\\label{tab:errcats}", "\\begin{tabular}{p{6.3cm}ccc}", "\\toprule", "Category & FP & FN & Total \\\\", "\\midrule"]
 tex += [f"{n} & {fp} & {fn} & {t} \\\\" for n, fp, fn, t in rows] + ["\\midrule", f"Total & {n_fp} & {n_fn} & {len(fin)} \\\\", "\\bottomrule", "\\end{tabular}", "\\end{table}"]
 out = os.path.join(ROOT, "paper_assets"); os.makedirs(out, exist_ok=True)

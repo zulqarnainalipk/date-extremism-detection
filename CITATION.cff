@@ -18,6 +18,8 @@ authors:
   - given-names: "Imran"
     family-names: "Ashraf"
 license: MIT
+repository-code: "https://github.com/zulqarnainalipk/date-extremism-detection"
+url: "https://github.com/zulqarnainalipk/date-extremism-detection"
 keywords:
   - extremism detection
   - transformer ensembles

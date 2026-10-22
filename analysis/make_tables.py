@@ -11,14 +11,21 @@ st = json.load(open(f"{T}/dataset_stats.json")); lat = json.load(open(f"{T}/late
 ci = lambda s: ast.literal_eval(s)
 f4 = lambda x: f"{x:.4f}"; f3 = lambda x: f"{x:.3f}"; f2 = lambda x: f"{x:.2f}"
 def pval(p): return "$<$0.001" if p < 0.001 else f"{p:.3f}"
+SHORT = {"tab:ablation": "Ablation of the pipeline at seed 42", "tab:calibration": "Calibration of single models and the ensemble", "tab:cost": "Cost-sensitive thresholds",
+         "tab:results": "Ten-fold cross-validation results", "tab:dataset": "Dataset statistics", "tab:comparison": "Encoder comparison", "tab:errcats": "Error categories in the annotated sample",
+         "tab:external": "Zero-shot transfer to external data", "tab:params": "Training configuration", "tab:learning": "Learning curves with and without augmentation",
+         "tab:multiseed": "Five-seed repetition of the core configurations", "tab:perclass": "Confusion counts and per-class scores", "tab:prior": "Effect of class-prior shift",
+         "tab:riskcov": "Selective prediction on the test posts", "tab:robust": "Robustness and identity-term probes", "tab:slices": "Accuracy on lexical slices",
+         "tab:tags": "Error rates by rule-based tag", "tab:test": "Results on the held-out test posts", "tab:threshold": "Operating points of the test ensemble"}
 def write(name, body, caption, label, cols, size="\\small", pos="h!", extra=""):
+    caption = SHORT.get(label, caption)
     tcs = 2 if size == "\\scriptsize" else 5
     open(f"{OUT}/{name}.tex", "w", encoding="utf8").write(
         f"\\begin{{table}}[{pos}]\n\\centering\n{size}\n\\caption{{{caption}}}\n\\label{{{label}}}\n\\setlength{{\\tabcolsep}}{{{tcs}pt}}\n\\begin{{tabular}}{{{cols}}}\n\\toprule\n{body}\n\\bottomrule\n\\end{{tabular}}\n{extra}\\end{{table}}\n")
 def rows(lst): return " \\\\\n".join(" & ".join(map(str, r)) for r in lst) + " \\\\"
 
 NICE = {"date_full": "BERTweet-base (DATE)", "bertweet_large": "BERTweet-large", "roberta_base": "RoBERTa-base", "bert_base": "BERT-base", "distilbert": "DistilBERT-base",
-        "xlm_roberta": "XLM-RoBERTa-base", "twitter_roberta": "Twitter-RoBERTa-base", "twitter_roberta_hate": "Twitter-RoBERTa-hate", "twhin_bert": "TwHIN-BERT-base", "toxic_bert": "Toxic-BERT"}
+        "xlm_roberta": "XLM-RoBERTa-base", "twitter_roberta": "Twitter-RoBERTa-base", "twitter_roberta_hate": "Twitter-RoBERTa-hate", "twhin_bert": "TwHIN-BERT-base", "toxic_bert": "Toxic-BERT", "deberta_v3": "DeBERTa-v3-base"}
 
 # ---- dataset
 ex = rd("augmentation_sizes")
@@ -55,7 +62,7 @@ tt = [["Accuracy", f"{s0.test_single_acc_mean:.4f} $\\pm$ {s0.test_single_acc_st
       ["Matthews corr. coef.", "--", f4(s0.test_ens_mcc)], ["ROC-AUC", "--", f4(s0.test_ens_auc)], ["PR-AUC (extremist class)", "--", f4(s0.test_ens_pr_auc)],
       ["ECE (15 bins)", f4(s0.test_single_ece_mean), f"{s0.test_ens_ece15:.4f} [{eceCI[0]:.4f}, {eceCI[1]:.4f}]"], ["Brier score", f4(s0.test_single_brier_mean), f4(s0.test_ens_brier_sum)],
       ["NLL", f4(s0.test_single_nll_mean), f4(s0.test_ens_nll)]]
-write("tab_test", "Metric & Single fold model (mean $\\pm$ sd of 10) & 10-model soft-vote ensemble [95\\% CI] \\\\\n\\midrule\n" + rows(tt),
+write("tab_test", "Metric & Single model (mean $\\pm$ sd) & Ensemble [95\\% CI] \\\\\n\\midrule\n" + rows(tt),
       "Results on the 749 labelled test posts (123 extremist, 626 non-extremist). Intervals are percentile bootstrap intervals (2,000 resamples of the test posts).", "tab:test", "lcc")
 
 # ---- calibration table
@@ -66,18 +73,18 @@ for k in sel:
     cr.append([NICE.get(k, k) if k != "no_aug" else "DATE w/o augmentation", k.replace("_", "\\_") if False else "", f4(c.ece_single_mean), f4(c.ece_single_tempscaled), f4(c.ece_ensemble), f4(c.ece_ensemble_of_tempscaled), f"{c.delta_ece:+.4f} [{d[0]:+.4f}, {d[1]:+.4f}]"])
 cr = [[r[0], r[2], r[3], r[4], r[5], r[6]] for r in cr]
 cr[2][0] = "DATE w/o class weights"; cr[3][0] = "DATE w/o cosine schedule"
-write("tab_calibration", "Configuration & Single & Single + TS & Ensemble & Ens. of TS & $\\Delta$ECE (ens.\\ $-$ single) [95\\% CI] \\\\\n\\midrule\n" + rows(cr),
+write("tab_calibration", "Configuration & Single & \\shortstack{Single\\\\+ TS} & Ensemble & \\shortstack{Ens.\\\\of TS} & \\shortstack{$\\Delta$ECE\\\\{[}95\\% CI]} \\\\\n\\midrule\n" + rows(cr),
       "Test-set ECE (15 bins, 749 posts) of single fold models and of the 10-model soft-vote ensemble. ``TS'' = temperature scaling fitted on each model's inner-validation split. $\\Delta$ECE is the paired-bootstrap difference between the ensemble and the mean of the single models.", "tab:calibration", "lccccc", size="\\scriptsize")
 
 # ---- encoders under identical protocol
-order = ["distilbert", "bert_base", "toxic_bert", "xlm_roberta", "twhin_bert", "roberta_base", "twitter_roberta", "twitter_roberta_hate", "date_full", "bertweet_large"]
+order = ["distilbert", "bert_base", "toxic_bert", "xlm_roberta", "twhin_bert", "deberta_v3", "roberta_base", "twitter_roberta", "twitter_roberta_hate", "date_full", "bertweet_large"]
 er = []
 for k in order:
     r = S.loc[k]; a = ci(r.test_ens_acc_ci)
-    er.append([NICE[k], f"{r.params_millions_single:.0f}", f"{r.cv_acc_mean:.4f} $\\pm$ {r.cv_acc_std:.4f}", f"{r.test_ens_acc:.4f} [{a[0]:.3f}, {a[1]:.3f}]", f4(r.test_ens_f1_macro), f4(r.test_ens_auc), f4(r.test_ens_ece15)])
-er.append(["TF-IDF + logistic regression", "--", f"{BL.loc['tfidf_logreg'].cv_acc_mean:.4f} $\\pm$ {BL.loc['tfidf_logreg'].cv_acc_std:.4f}", f4(BL.loc['tfidf_logreg'].test_acc), f4(BL.loc['tfidf_logreg'].test_f1_macro), f4(BL.loc['tfidf_logreg'].test_auc), f4(BL.loc['tfidf_logreg'].test_ece15)])
-er.append(["TF-IDF + linear SVM", "--", f"{BL.loc['tfidf_linsvm'].cv_acc_mean:.4f} $\\pm$ {BL.loc['tfidf_linsvm'].cv_acc_std:.4f}", f4(BL.loc['tfidf_linsvm'].test_acc), f4(BL.loc['tfidf_linsvm'].test_f1_macro), "--", "--"])
-write("tab_encoders", "Encoder & Params (M) & CV acc.\\ (mean $\\pm$ sd) & Test acc.\\ (ens.) [95\\% CI] & Test macro-F1 & Test AUC & Test ECE \\\\\n\\midrule\n" + rows(er),
+    er.append([NICE[k], f"{r.params_millions_single:.0f}", f"{r.cv_acc_mean:.3f} $\\pm$ {r.cv_acc_std:.3f}", f"{r.test_ens_acc:.3f} [{a[0]:.3f}, {a[1]:.3f}]", f3(r.test_ens_f1_macro), f3(r.test_ens_auc), f3(r.test_ens_ece15)])
+er.append(["TF-IDF + logistic regression", "--", f"{BL.loc['tfidf_logreg'].cv_acc_mean:.3f} $\\pm$ {BL.loc['tfidf_logreg'].cv_acc_std:.3f}", f3(BL.loc['tfidf_logreg'].test_acc), f3(BL.loc['tfidf_logreg'].test_f1_macro), f3(BL.loc['tfidf_logreg'].test_auc), f3(BL.loc['tfidf_logreg'].test_ece15)])
+er.append(["TF-IDF + linear SVM", "--", f"{BL.loc['tfidf_linsvm'].cv_acc_mean:.3f} $\\pm$ {BL.loc['tfidf_linsvm'].cv_acc_std:.3f}", f3(BL.loc['tfidf_linsvm'].test_acc), f3(BL.loc['tfidf_linsvm'].test_f1_macro), "--", "--"])
+write("tab_encoders", "Encoder & \\shortstack{Params\\\\(M)} & \\shortstack{CV acc.\\\\(mean $\\pm$ sd)} & \\shortstack{Test acc. (ens.)\\\\{[}95\\% CI]} & \\shortstack{Test\\\\macro-F1} & \\shortstack{Test\\\\AUC} & \\shortstack{Test\\\\ECE} \\\\\n\\midrule\n" + rows(er),
       "Controlled comparison of encoders under one protocol (same folds, same augmentation, same early stopping, 10-fold soft-vote ensemble). Test columns use the 749 labelled test posts. Single seed (42).", "tab:comparison", "lcccccc", size="\\scriptsize", pos="t")
 
 # ---- ablation
@@ -125,14 +132,14 @@ write("tab_cost", "Cost ratio FN:FP & Threshold (chosen on OOF) & FP & FN & Cost
 # ---- risk-coverage
 rc = rd("risk_coverage"); rc = rc[(rc.config == "date_full")]
 rcr = []
-for tag, lab in [("test_ensemble", "Test, ensemble"), ("test_single_mean", "Test, single model (mean)"), ("oof_single", "OOF, single models")]:
+for tag, lab in [("test_ensemble", "Test, ensemble"), ("test_single_mean", "Test, single (mean)"), ("oof_single", "OOF, single")]:
     r = rc[rc.on == tag].iloc[0]; rcr.append([lab] + [f3(r[f"acc@cov{c}"]) for c in (50, 70, 80, 90, 100)] + [f3(r.aurc)])
 write("tab_riskcov", "Evaluation & 50\\% & 70\\% & 80\\% & 90\\% & 100\\% & AURC \\\\\n\\midrule\n" + rows(rcr),
       "Selective prediction: accuracy on the most confident $x$\\% of posts (coverage); the remaining posts would be escalated to human reviewers. AURC = area under the risk--coverage curve (lower is better).", "tab:riskcov", "lcccccc")
 
 # ---- robustness
 rb = rd("robustness_and_fairness_probes"); rb = rb[rb.config.isin(["date_full", "no_aug", "roberta_base"])]
-nm = {"typo10": "Character swaps in 10\\% of words", "typo20": "Character swaps in 20\\% of words", "worddrop15": "Random word dropout (15\\%)", "ident_swap": "Identity terms swapped (muslims$\\to$christians, \\ldots)", "ident_neutral": "Identity terms $\\to$ ``people''"}
+nm = {"typo10": "Character swaps in 10\\% of words", "typo20": "Character swaps in 20\\% of words", "worddrop15": "Random word dropout (15\\%)", "ident_swap": "Identity terms swapped between groups", "ident_neutral": "Identity terms $\\to$ ``people''"}
 rr = []
 for p in ["typo10", "typo20", "worddrop15", "ident_swap", "ident_neutral"]:
     row = [nm[p], int(rb[(rb.config == "date_full") & (rb.perturbation == p)].n.iloc[0])]
@@ -151,7 +158,7 @@ write("tab_external", "Model (trained on our data only) & \\multicolumn{2}{c}{Da
       "Zero-shot transfer of the 10-model ensembles to two external hate-speech sets (3,000 posts each, 30\\% positive; positive = hate speech, so labels are related but not identical to ``extremist'').", "tab:external", "lcccc")
 
 # ---- prior shift
-ps = rd("prior_shift_analysis"); ps = ps[ps.config == "date_full"]; lab = {"raw": "Raw ensemble", "prior_adjusted_oracle": "Prior-adjusted to true test prior (oracle)", "prior_adjusted_EM_unlabelled": "Prior-adjusted with EM-estimated prior"}
+ps = rd("prior_shift_analysis"); ps = ps[ps.config == "date_full"]; lab = {"raw": "Raw ensemble", "prior_adjusted_oracle": "Prior-adjusted (oracle)", "prior_adjusted_EM_unlabelled": "Prior-adjusted (EM estimate)"}
 prr = [[lab[r.variant], f3(r.acc), f3(r.bal_acc), f3(r.f1_macro), f3(r.mcc), f3(r.ece15)] for r in ps.itertuples()]
 est = ps.em_estimated_test_prior.iloc[0]
 write("tab_prior", "Variant & Accuracy & Balanced acc. & Macro-F1 & MCC & ECE \\\\\n\\midrule\n" + rows(prr),
@@ -171,8 +178,24 @@ tgr = []
 for t_ in tn:
     a = tg[(tg.on == "oof") & (tg.tag == t_)].iloc[0]; b = tg[(tg.on == "test_ensemble") & (tg.tag == t_)].iloc[0]
     tgr.append([tn[t_], int(a.n), f"{a.error_rate*100:.1f}\\% / {a.error_rate_without_tag*100:.1f}\\%", int(b.n), f"{b.error_rate*100:.1f}\\% / {b.error_rate_without_tag*100:.1f}\\%"])
-write("tab_tags", "Rule-based tag & OOF $n$ & OOF error: with / without tag & Test $n$ & Test error: with / without tag \\\\\n\\midrule\n" + rows(tgr),
+write("tab_tags", "Rule-based tag & OOF $n$ & \\shortstack{OOF error\\\\with / without} & Test $n$ & \\shortstack{Test error\\\\with / without} \\\\\n\\midrule\n" + rows(tgr),
       "Objective error analysis with rule-based tags (OOF: 400 errors of 2,250; test: 118 errors of 749). The tags are keyword and length rules, not a manual taxonomy.", "tab:tags", "lcccc", size="\\scriptsize")
+
+# ---- five-seed repetition of the core grid
+from scipy.stats import ttest_1samp
+MS = rd("multiseed_summary").set_index("config")
+per = lambda k: pd.read_csv(f"{T}/multiseed_{k}_per_seed.csv")
+d0 = per("date_full")
+def delta(k, col):
+    diff = (per(k)[col] - d0[col]).values; p = ttest_1samp(diff, 0).pvalue
+    return f"${diff.mean()*100:+.1f}$ ({'$<$.001' if p < 0.001 else f'{p:.3f}'.lstrip('0')})"
+ms_rows = []
+for k, nm in [("date_full", "Full DATE"), ("no_aug", "No augmentation"), ("no_cw", "No class weights"), ("no_cosine", "No cosine schedule"), ("date_grouped", "Grouped folds"), ("roberta_base", "RoBERTa-base")]:
+    r = MS.loc[k]
+    ms_rows.append([nm, f"{r.oof_acc_mean:.3f} $\\pm$ {r.oof_acc_std:.3f}", f"{r.test_ens_acc_mean:.3f} $\\pm$ {r.test_ens_acc_std:.3f}", f4(r.test_ens_f1_macro_mean), f4(r.test_ens_ece_mean), f4(r.test_single_ece_mean),
+                    "--" if k == "date_full" else delta(k, "test_ens_acc"), "--" if k == "date_full" else delta(k, "oof_acc")])
+write("tab_multiseed", "Configuration & \\shortstack{OOF\\\\acc.} & \\shortstack{Test acc.\\\\(ens.)} & \\shortstack{Test\\\\macro-F1} & \\shortstack{ECE\\\\(ens.)} & \\shortstack{ECE\\\\(single)} & \\shortstack{Test acc. vs\\\\full (pts, $p$)} & \\shortstack{OOF acc. vs\\\\full (pts, $p$)} \\\\\n\\midrule\n" + rows(ms_rows),
+      "The six core configurations repeated with five seeds (42 to 46; a seed changes the fold assignment, the initialisation and the augmentation). Values are mean $\\pm$ standard deviation over seeds (macro-F1 and ECE: mean). The last two columns give the mean difference between the variant and the full pipeline in accuracy points and the $p$-value of a paired $t$-test over the five seeds.", "tab:multiseed", "lccccccc", size="\\scriptsize")
 
 # ---- numbers used in text
 json.dump(dict(latency_ms=lat["ms_per_post_single_model"], ens_latency_ms=lat["ms_per_post_10_model_ensemble_sequential"]), open(f"{OUT}/numbers.json", "w"))
