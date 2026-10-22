@@ -1,0 +1,39 @@
+{
+  "csv": "/kaggle/input/datasets/zelza0/date-revision/dataset.csv",
+  "sha256": "ea585a13cbdf93c0398be75a2149c0744c7cbec598f3d55597473c8924e36744",
+  "rows_in_file": 3000,
+  "missing_label_rows": [
+    2938
+  ],
+  "train_n": 2250,
+  "test_n": 749,
+  "train_ext": 1006,
+  "train_non": 1244,
+  "test_ext": 123,
+  "test_non": 626,
+  "train_ext_pct": 44.711111111111116,
+  "test_ext_pct": 16.421895861148197,
+  "words_mean": 23.087555555555557,
+  "words_median": 18.0,
+  "words_min": 2,
+  "words_max": 281,
+  "bertweet_tokens_mean": 27.112,
+  "bertweet_tokens_median": 21.0,
+  "bertweet_tokens_max": 294,
+  "train_truncated_at_128": 20,
+  "test_truncated_at_128": 0,
+  "exact_duplicate_texts_train": 0,
+  "test_texts_also_in_train": 0,
+  "urls_pct": 0.044444444444444446,
+  "pct_detected_english": 96.6322107369123,
+  "top_detected_languages_pct": {
+    "en": 96.63,
+    "tl": 0.37,
+    "fr": 0.33,
+    "da": 0.3,
+    "cy": 0.3,
+    "sv": 0.23
+  },
+  "pct_posts_with_hashtag_or_mention_markers": 0.0,
+  "pct_posts_with_emoji_description_phrases": 2.0
+}

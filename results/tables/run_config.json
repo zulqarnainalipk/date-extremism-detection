@@ -1,0 +1,174 @@
+{
+  "CONFIGS": {
+    "date_full": {
+      "model": "vinai/bertweet-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "no_aug": {
+      "model": "vinai/bertweet-base",
+      "aug": false,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat",
+      "probe_aug": true
+    },
+    "no_cw": {
+      "model": "vinai/bertweet-base",
+      "aug": true,
+      "cw": false,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "no_cosine": {
+      "model": "vinai/bertweet-base",
+      "aug": true,
+      "cw": true,
+      "sched": "constant",
+      "split": "strat"
+    },
+    "roberta_base": {
+      "model": "roberta-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "date_grouped": {
+      "model": "vinai/bertweet-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "group"
+    },
+    "bert_base": {
+      "model": "bert-base-uncased",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "distilbert": {
+      "model": "distilbert-base-uncased",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "deberta_v3": {
+      "model": "microsoft/deberta-v3-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "xlm_roberta": {
+      "model": "xlm-roberta-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "twitter_roberta": {
+      "model": "cardiffnlp/twitter-roberta-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "twitter_roberta_hate": {
+      "model": "cardiffnlp/twitter-roberta-base-hate-latest",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "twhin_bert": {
+      "model": "Twitter/twhin-bert-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "toxic_bert": {
+      "model": "unitary/toxic-bert",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat"
+    },
+    "bertweet_large": {
+      "model": "vinai/bertweet-large",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat",
+      "bs": 32,
+      "accum": 4
+    },
+    "date_full_f25": {
+      "model": "vinai/bertweet-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat",
+      "frac": 0.25
+    },
+    "date_full_f50": {
+      "model": "vinai/bertweet-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat",
+      "frac": 0.5
+    },
+    "no_aug_f25": {
+      "model": "vinai/bertweet-base",
+      "aug": false,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat",
+      "frac": 0.25
+    },
+    "no_aug_f50": {
+      "model": "vinai/bertweet-base",
+      "aug": false,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat",
+      "frac": 0.5
+    },
+    "aug_ctx_only": {
+      "model": "vinai/bertweet-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat",
+      "aug_ops": "ctx"
+    },
+    "aug_eda_only": {
+      "model": "vinai/bertweet-base",
+      "aug": true,
+      "cw": true,
+      "sched": "cosine",
+      "split": "strat",
+      "aug_ops": "eda"
+    }
+  },
+  "N_FOLDS": 10,
+  "MAX_EPOCHS": 8,
+  "PATIENCE": 3,
+  "BATCH": 64,
+  "ACCUM": 2,
+  "LR": 2e-05,
+  "WD": 0.01,
+  "WARMUP": 0.1,
+  "INNER_VAL_FRAC": 0.1,
+  "MAX_LEN": 128,
+  "SEEDS": [
+    42
+  ],
+  "failed": []
+}

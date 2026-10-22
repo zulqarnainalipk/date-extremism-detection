@@ -1,0 +1,26 @@
+cff-version: 1.2.0
+message: "If you use this code or results, please cite the paper and the dataset."
+title: "DATE: Domain-Aware Transformer Ensembles for Reliable Extremism Detection in Social Media"
+type: software
+authors:
+  - given-names: "Zulqarnain"
+    family-names: "Ali"
+  - given-names: "Muhammad Ibrahim"
+    family-names: "Qasim"
+  - given-names: "Hafiz Muhammad"
+    family-names: "Raza ur Rehman"
+  - given-names: "Muhammad Zeeshan"
+    family-names: "Jhandir"
+  - given-names: "Monica Gracia"
+    family-names: "Villar"
+  - given-names: "Helena"
+    family-names: "Garay"
+  - given-names: "Imran"
+    family-names: "Ashraf"
+license: MIT
+keywords:
+  - extremism detection
+  - transformer ensembles
+  - BERTweet
+  - model calibration
+  - data augmentation

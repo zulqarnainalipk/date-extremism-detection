@@ -1,0 +1,61 @@
+id,error_type,annotator1,annotator2,category_final,category_name,source
+1,false_positive,1,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+2,false_negative,2,8,8,Explicit hostile content missed by the model,two annotators; disagreements resolved by discussion
+3,false_negative,1,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+4,false_negative,1,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+5,false_negative,8,8,8,Explicit hostile content missed by the model,two annotators; disagreements resolved by discussion
+6,false_positive,4,4,4,"Quotation, reported speech or counter-speech",two annotators; disagreements resolved by discussion
+7,false_positive,8,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+8,false_positive,3,3,3,Group mentioned without hostility,two annotators; disagreements resolved by discussion
+9,false_positive,9,6,9,Other or unclear,two annotators; disagreements resolved by discussion
+10,false_positive,2,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+11,false_positive,9,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+12,false_negative,8,8,8,Explicit hostile content missed by the model,two annotators; disagreements resolved by discussion
+13,false_positive,7,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+14,false_negative,1,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+15,false_negative,4,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+16,false_positive,3,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+17,false_negative,6,6,6,Needs external context,two annotators; disagreements resolved by discussion
+18,false_positive,2,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+19,false_negative,8,8,8,Explicit hostile content missed by the model,two annotators; disagreements resolved by discussion
+20,false_positive,2,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+21,false_positive,1,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+22,false_negative,1,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+23,false_positive,7,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+24,false_positive,2,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+25,false_positive,2,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+26,false_negative,8,8,8,Explicit hostile content missed by the model,two annotators; disagreements resolved by discussion
+27,false_negative,1,6,6,Needs external context,two annotators; disagreements resolved by discussion
+28,false_positive,2,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+29,false_positive,2,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+30,false_positive,4,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+31,false_negative,8,8,8,Explicit hostile content missed by the model,two annotators; disagreements resolved by discussion
+32,false_positive,6,6,6,Needs external context,two annotators; disagreements resolved by discussion
+33,false_positive,9,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+34,false_positive,2,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+35,false_positive,9,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+36,false_negative,9,8,8,Explicit hostile content missed by the model,two annotators; disagreements resolved by discussion
+37,false_negative,1,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+38,false_negative,8,8,8,Explicit hostile content missed by the model,two annotators; disagreements resolved by discussion
+39,false_positive,2,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+40,false_positive,4,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+41,false_negative,2,6,6,Needs external context,two annotators; disagreements resolved by discussion
+42,false_positive,4,4,4,"Quotation, reported speech or counter-speech",two annotators; disagreements resolved by discussion
+43,false_positive,2,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+44,false_positive,4,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+45,false_negative,9,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+46,false_positive,3,3,3,Group mentioned without hostility,two annotators; disagreements resolved by discussion
+47,false_positive,4,4,4,"Quotation, reported speech or counter-speech",two annotators; disagreements resolved by discussion
+48,false_negative,9,9,9,Other or unclear,two annotators; disagreements resolved by discussion
+49,false_positive,7,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+50,false_negative,4,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+51,false_positive,4,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+52,false_positive,2,7,7,Questionable gold label,two annotators; disagreements resolved by discussion
+53,false_positive,7,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+54,false_negative,4,7,5,"Sarcasm, irony or joke",two annotators; disagreements resolved by discussion
+55,false_negative,7,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+56,false_positive,4,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion
+57,false_positive,4,3,3,Group mentioned without hostility,two annotators; disagreements resolved by discussion
+58,false_negative,4,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+59,false_negative,7,1,1,Implicit or veiled extremism,two annotators; disagreements resolved by discussion
+60,false_positive,4,2,2,Trigger words without group-directed harm,two annotators; disagreements resolved by discussion

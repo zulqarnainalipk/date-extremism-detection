@@ -1,0 +1,13 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.venv/
+venv/
+*.zip
+outputs_smoke/
+paper_assets/*
+!paper_assets/.gitkeep
+!paper_assets/README.md
+results/aug/
+.DS_Store
+Thumbs.db
